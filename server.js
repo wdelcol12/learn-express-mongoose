@@ -16,7 +16,7 @@ let BookDetails = require('./pages/book_details');
 let CreateBook = require('./pages/create_book');
 
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const mongoDB = "mongodb://127.0.0.1:27017/my_library_db";
 // mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connect(mongoDB);
@@ -36,18 +36,24 @@ app.get('/home', (_, res) => {
   Home.show_home(res);
 })
 
-app.get('/available', (_, res) => {
+app.get("/available", async (_, res) => {
   BooksStatus.show_all_books_status(res);
+
+  const returned_res = await BooksStatus.find({});
+  res.json(returned_res)
 })
 
-app.get('/books', (_, res) => {
+app.get("/books", (_, res) => {
   Books.show_books()
     .then((data) => res.send(data))
     .catch((_) => res.send('No books found'));
 })
 
-app.get('/authors', (_, res) => {
+app.get("/authors", async(_, res) => {
   Authors.show_all_authors(res);
+
+  const returned_res = await Authors.find({});
+  res.json(returned_res);
 })
 
 app.get('/book_dtls', (req, res) => {
